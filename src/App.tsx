@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
+import { createGlobalState } from 'react-hooks-global-state';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
+import Project from './components/pages/Project';
+import ProjectList from './components/pages/ProjectList';
+import SignInOrSignUp from './components/pages/SignInOrSignUp';
+import Client from './service/client';
+
+
+const baseURL = process.env.REACT_APP_API_BASE_URL!;
+const initialState = {
+  token: "",
+  client: new Client(baseURL),
+}
+export const { useGlobalState } = createGlobalState(initialState);
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Route exact path="/" component={SignInOrSignUp} />
+        <Route exact path="/projects/:id" component={Project} />
+        <Route exact path="/projects" component={ProjectList} />
+      </Router>
     </div>
-  );
+  )
 }
 
 export default App;

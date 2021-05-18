@@ -1,0 +1,50 @@
+import HTTPClient from "./base/client";
+import { CreateProjectRequest, SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from "./types/controllers/controllers";
+
+
+export default class Client extends HTTPClient {
+    constructor(baseURL: string) {
+        super(baseURL);
+    }
+
+    async signUp(req: SignUpRequest): Promise<SignUpResponse> {
+        const res = await this._post("/api/auth/sign-up", req);
+        if (res.ok) {
+            return await res.json();
+        }
+        throw new Error("error")
+    }
+
+    async signIn(req: SignInRequest): Promise<SignInResponse> {
+        const res = await this._post("/api/auth/sign-in", req);
+        if (res.ok) {
+            return await res.json()
+        }
+        throw new Error("error")
+    }
+
+    async projectFindAll(): Promise<any> {
+        const res = await this._get("/api/projects");
+        if (res.ok) {
+            return await res.json()
+        }
+        throw new Error("error")
+    }
+
+    async projectFindWithTasks(id: string): Promise<any> {
+        const res = await this._get("/api/projects/" + id);
+        if (res.ok) {
+            return await res.json()
+        }
+        throw new Error("error")
+    }
+
+    async projectCreate(req: CreateProjectRequest): Promise<any> {
+        const res = await this._post("/api/projects", req);
+        if (res.ok) {
+            return await res.json();
+        }
+        throw new Error("error")
+    }
+
+}
