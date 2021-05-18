@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useGlobalState } from '../../App';
@@ -39,7 +38,7 @@ function Presenter(props: Props) {
 export default function ProjectList() {
     const history = useHistory();
     const [client] = useGlobalState("client");
-    const [token, setToken] = useGlobalState("token");
+    const [token] = useGlobalState("token");
     const [projects, setProjects] = useState([] as ProjectEntity[]);
     const [newProjectName, setNewProjectName] = useState("");
 
@@ -63,7 +62,7 @@ export default function ProjectList() {
     const createProject = () => {
         (async () => {
             try {
-                const res = await client.projectCreate({
+                await client.projectCreate({
                     name: newProjectName,
                 })
                 syncProjects();

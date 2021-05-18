@@ -3,9 +3,6 @@ import { CreateProjectRequest, SignInRequest, SignInResponse, SignUpRequest, Sig
 
 
 export default class Client extends HTTPClient {
-    constructor(baseURL: string) {
-        super(baseURL);
-    }
 
     async signUp(req: SignUpRequest): Promise<SignUpResponse> {
         const res = await this._post("/api/auth/sign-up", req);

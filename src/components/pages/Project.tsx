@@ -1,6 +1,5 @@
-import { create } from 'domain';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useGlobalState } from '../../App';
 import { ProjectEntity, TaskEntity } from '../../service/types/entities/entities';
 
@@ -15,7 +14,6 @@ interface Props {
 
 function Presenter(props: Props) {
     const { newProjectName, project, tasks, setNewProjectName, createProject } = props;
-    const history = useHistory()
 
     return (
         <div>
@@ -39,7 +37,7 @@ function Presenter(props: Props) {
 export default function Project() {
     const history = useHistory();
     const [client] = useGlobalState("client");
-    const [token, setToken] = useGlobalState("token");
+    const [token] = useGlobalState("token");
     const [project, setProject] = useState({} as ProjectEntity);
     const [tasks, setTasks] = useState([] as TaskEntity[]);
     const [newProjectName, setNewProjectName] = useState("");
@@ -48,9 +46,9 @@ export default function Project() {
     useEffect(() => {
         if (token === "") {
             history.replace("/");
-            return;
+        } else {
+            syncProjects()
         }
-        syncProjects()
     }, [token])
 
     const syncProjects = async () => {
@@ -70,7 +68,7 @@ export default function Project() {
     const createProject = () => {
         (async () => {
             try {
-                const res = await client.projectCreate({
+                await client.projectCreate({
                     name: newProjectName,
                 })
                 syncProjects();
