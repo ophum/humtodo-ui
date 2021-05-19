@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useGlobalState } from '../../App';
-import { useIsSignIn } from '../../service/auth/auth';
 import { ProjectEntity } from '../../client/types/entities/entities';
+import { useIsSignIn } from '../../service/auth/auth';
+import {
+  useCreateProject,
+  useFindAllProject,
+} from '../../service/project/project';
 
 interface Props {
   newProjectName: string;
@@ -48,10 +51,11 @@ function Presenter(props: Props) {
 
 export default function ProjectList() {
   const history = useHistory();
-  const [client] = useGlobalState('client');
   const [projects, setProjects] = useState([] as ProjectEntity[]);
   const [newProjectName, setNewProjectName] = useState('');
   const isSignIn = useIsSignIn();
+  const createProject = useCreateProject();
+  const findAllProject = useFindAllProject();
 
   useEffect(() => {
     if (!isSignIn) {
@@ -63,24 +67,20 @@ export default function ProjectList() {
 
   const syncProjects = async () => {
     try {
-      const res = await client.projectFindAll();
-      setProjects(res.projects as ProjectEntity[]);
+      const projects = await findAllProject();
+      setProjects(projects);
     } catch (e) {
       alert(e);
     }
   };
 
-  const createProject = () => {
-    (async () => {
-      try {
-        await client.projectCreate({
-          name: newProjectName,
-        });
-        syncProjects();
-      } catch (e) {
-        alert(e);
-      }
-    })();
+  const handleCreateProject = async () => {
+    try {
+      await createProject(newProjectName);
+      syncProjects();
+    } catch (e) {
+      alert(e);
+    }
   };
 
   return (
@@ -88,7 +88,7 @@ export default function ProjectList() {
       newProjectName={newProjectName}
       projects={projects}
       setNewProjectName={setNewProjectName}
-      createProject={createProject}
+      createProject={handleCreateProject}
     />
   );
 }
