@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TaskEntity } from '../../client/types/entities/entities';
+import AddTodo from './AddTodo';
 
 interface Props {
   task: TaskEntity;
@@ -19,7 +20,15 @@ function Presenter(props: Props) {
           <button onClick={onToggle}>{isOpen ? '閉じる' : '開く'}</button>
         </div>
       </div>
-      {isOpen && <div>予定を追加</div>}
+      {isOpen && (
+        <div>
+          {task.todos &&
+            task.todos.map((v, k) => {
+              return <div key={k}>hoge</div>;
+            })}
+          <AddTodo taskId={task._id || ''} />
+        </div>
+      )}
     </div>
   );
 }
