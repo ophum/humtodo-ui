@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useGlobalState } from '../../App';
-import { useIsSignIn } from '../../service/auth/auth';
 import {
   ProjectEntity,
   TaskEntity,
 } from '../../client/types/entities/entities';
+import { useIsSignIn } from '../../service/auth/auth';
+import { useCreateTask } from '../../service/project/project';
 
 interface Props {
   newTask: TaskEntity;
@@ -13,11 +14,11 @@ interface Props {
   tasks: TaskEntity[];
 
   setNewTask: (t: TaskEntity) => void;
-  createProject: () => void;
+  createTask: () => void;
 }
 
 function Presenter(props: Props) {
-  const { newTask, project, tasks, setNewTask, createProject } = props;
+  const { newTask, project, tasks, setNewTask, createTask } = props;
 
   return (
     <div>
@@ -34,13 +35,30 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      <button type="button" onClick={createProject}>
+      TaskPlanHour:
+      <br />
+      <input
+        type="number"
+        value={newTask.plan}
+        onChange={(e) =>
+          setNewTask({
+            ...newTask,
+            plan: parseInt(e.target.value),
+          })
+        }
+      />
+      <br />
+      <button type="button" onClick={createTask}>
         add
       </button>
       <br />
       <p>{project.name}</p>
       {tasks.map((v, k) => {
-        return <li key={k}>{v.title}</li>;
+        return (
+          <li key={k}>
+            {v.title} {v.plan}
+          </li>
+        );
       })}
     </div>
   );
@@ -54,6 +72,7 @@ export default function Project() {
   const [newTask, setNewTask] = useState({} as TaskEntity);
   const { id } = useParams<{ id: string }>();
   const isSignIn = useIsSignIn();
+  const createTask = useCreateTask();
 
   useEffect(() => {
     if (!isSignIn) {
@@ -75,14 +94,20 @@ export default function Project() {
     }
   };
 
-  const createProject = () => {
-    (async () => {
-      try {
-        syncProject();
-      } catch (e) {
-        alert(e);
+  const handleCreateTask = async () => {
+    try {
+      if (project._id) {
+        await createTask(
+          project._id,
+          newTask.title,
+          newTask.plan,
+          newTask.assignee_ids
+        );
+        await syncProject();
       }
-    })();
+    } catch (e) {
+      alert(e);
+    }
   };
 
   return (
@@ -91,7 +116,7 @@ export default function Project() {
       project={project}
       tasks={tasks}
       setNewTask={setNewTask}
-      createProject={createProject}
+      createTask={handleCreateTask}
     />
   );
 }
