@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
-import { useGlobalState } from '../../App';
-import {
-  ProjectEntity,
-  TaskEntity,
-} from '../../client/types/entities/entities';
-import { useIsSignIn } from '../../service/auth/auth';
-import { useCreateTask } from '../../service/project/project';
+import { useGlobalState } from '../App';
+import { ProjectEntity, TaskEntity } from '../client/types/entities/entities';
+import { useIsSignIn } from '../service/auth/auth';
+import { useCreateTask } from '../service/project/project';
+import TaskItem from '../components/Project/TaskItem';
 
 interface Props {
   newTask: TaskEntity;
@@ -54,11 +52,7 @@ function Presenter(props: Props) {
       <br />
       <p>{project.name}</p>
       {tasks.map((v, k) => {
-        return (
-          <li key={k}>
-            {v.title} {v.plan}
-          </li>
-        );
+        return <TaskItem key={k} task={v} />;
       })}
     </div>
   );

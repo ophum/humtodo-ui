@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { ProjectEntity } from '../../client/types/entities/entities';
-import { useIsSignIn } from '../../service/auth/auth';
+import { ProjectEntity } from '../client/types/entities/entities';
+import { useIsSignIn } from '../service/auth/auth';
 import {
   useCreateProject,
   useFindAllProject,
-} from '../../service/project/project';
+} from '../service/project/project';
 
 interface Props {
   newProjectName: string;

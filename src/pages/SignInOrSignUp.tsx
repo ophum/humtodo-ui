@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { useSignIn, useSignUp } from '../../service/auth/auth';
+import { useSignIn, useSignUp } from '../service/auth/auth';
 
 interface Props {
   name: string;

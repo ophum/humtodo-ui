@@ -2,9 +2,9 @@ import React from 'react';
 import { createGlobalState } from 'react-hooks-global-state';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
-import Project from './components/pages/Project';
-import ProjectList from './components/pages/ProjectList';
-import SignInOrSignUp from './components/pages/SignInOrSignUp';
+import Project from './pages/Project';
+import ProjectList from './pages/ProjectList';
+import SignInOrSignUp from './pages/SignInOrSignUp';
 import Client from './client/client';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
