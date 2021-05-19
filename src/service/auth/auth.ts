@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGlobalState } from '../../App';
-import { AuthorizationType } from '../base/client';
+import { AuthorizationType } from '../../client/base/client';
 
 export const useSignIn = () => {
   const [client] = useGlobalState('client');

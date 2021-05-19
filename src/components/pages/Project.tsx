@@ -5,7 +5,7 @@ import { useIsSignIn } from '../../service/auth/auth';
 import {
   ProjectEntity,
   TaskEntity,
-} from '../../service/types/entities/entities';
+} from '../../client/types/entities/entities';
 
 interface Props {
   newTask: TaskEntity;

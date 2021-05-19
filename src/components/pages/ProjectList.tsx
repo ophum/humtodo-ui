@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useGlobalState } from '../../App';
 import { useIsSignIn } from '../../service/auth/auth';
-import { ProjectEntity } from '../../service/types/entities/entities';
+import { ProjectEntity } from '../../client/types/entities/entities';
 
 interface Props {
   newProjectName: string;
