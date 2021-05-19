@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useGlobalState } from '../../App';
+import { useIsSignIn } from '../../service/auth/auth';
 import {
   ProjectEntity,
   TaskEntity,
 } from '../../service/types/entities/entities';
 
 interface Props {
-  newProjectName: string;
+  newTask: TaskEntity;
   project: ProjectEntity;
   tasks: TaskEntity[];
 
-  setNewProjectName: (e: string) => void;
+  setNewTask: (t: TaskEntity) => void;
   createProject: () => void;
 }
 
 function Presenter(props: Props) {
-  const { newProjectName, project, tasks, setNewProjectName, createProject } =
-    props;
+  const { newTask, project, tasks, setNewTask, createProject } = props;
 
   return (
     <div>
-      ProjectName:
+      TaskTitle:
       <br />
       <input
         type="text"
-        value={newProjectName}
-        onChange={(e) => setNewProjectName(e.target.value)}
+        value={newTask.title}
+        onChange={(e) =>
+          setNewTask({
+            ...newTask,
+            title: e.target.value,
+          })
+        }
       />
       <br />
       <button type="button" onClick={createProject}>
@@ -44,21 +49,21 @@ function Presenter(props: Props) {
 export default function Project() {
   const history = useHistory();
   const [client] = useGlobalState('client');
-  const [token] = useGlobalState('token');
   const [project, setProject] = useState({} as ProjectEntity);
   const [tasks, setTasks] = useState([] as TaskEntity[]);
-  const [newProjectName, setNewProjectName] = useState('');
+  const [newTask, setNewTask] = useState({} as TaskEntity);
   const { id } = useParams<{ id: string }>();
+  const isSignIn = useIsSignIn();
 
   useEffect(() => {
-    if (token === '') {
+    if (!isSignIn) {
       history.replace('/');
     } else {
-      syncProjects();
+      syncProject();
     }
-  }, [token]);
+  }, [isSignIn]);
 
-  const syncProjects = async () => {
+  const syncProject = async () => {
     try {
       const res = await client.projectFindWithTasks(id);
       setProject({
@@ -73,10 +78,7 @@ export default function Project() {
   const createProject = () => {
     (async () => {
       try {
-        await client.projectCreate({
-          name: newProjectName,
-        });
-        syncProjects();
+        syncProject();
       } catch (e) {
         alert(e);
       }
@@ -85,10 +87,10 @@ export default function Project() {
 
   return (
     <Presenter
-      newProjectName={newProjectName}
+      newTask={newTask}
       project={project}
       tasks={tasks}
-      setNewProjectName={setNewProjectName}
+      setNewTask={setNewTask}
       createProject={createProject}
     />
   );

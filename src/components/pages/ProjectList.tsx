@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useGlobalState } from '../../App';
+import { useIsSignIn } from '../../service/auth/auth';
 import { ProjectEntity } from '../../service/types/entities/entities';
 
 interface Props {
@@ -34,7 +35,7 @@ function Presenter(props: Props) {
           <li
             key={k}
             onClick={() => {
-              history.push('/projects/' + v._id!);
+              history.push('/projects/' + v._id || '');
             }}
           >
             {v.name}
@@ -48,17 +49,17 @@ function Presenter(props: Props) {
 export default function ProjectList() {
   const history = useHistory();
   const [client] = useGlobalState('client');
-  const [token] = useGlobalState('token');
   const [projects, setProjects] = useState([] as ProjectEntity[]);
   const [newProjectName, setNewProjectName] = useState('');
+  const isSignIn = useIsSignIn();
 
   useEffect(() => {
-    if (token === '') {
+    if (!isSignIn) {
       history.replace('/');
       return;
     }
     syncProjects();
-  }, [token]);
+  }, [isSignIn]);
 
   const syncProjects = async () => {
     try {

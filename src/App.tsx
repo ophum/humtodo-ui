@@ -7,7 +7,7 @@ import ProjectList from './components/pages/ProjectList';
 import SignInOrSignUp from './components/pages/SignInOrSignUp';
 import Client from './service/client';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL!;
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 const initialState = {
   token: '',
   client: new Client(baseURL),

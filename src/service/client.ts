@@ -5,6 +5,8 @@ import {
   SignInResponse,
   SignUpRequest,
   SignUpResponse,
+  VerifyRequest,
+  VerifyResponse,
 } from './types/controllers/controllers';
 
 export default class Client extends HTTPClient {
@@ -18,6 +20,14 @@ export default class Client extends HTTPClient {
 
   async signIn(req: SignInRequest): Promise<SignInResponse> {
     const res = await this._post('/api/auth/sign-in', req);
+    if (res.ok) {
+      return await res.json();
+    }
+    throw new Error('error');
+  }
+
+  async verify(req: VerifyRequest): Promise<VerifyResponse> {
+    const res = await this._post('/api/auth/verify', req);
     if (res.ok) {
       return await res.json();
     }
