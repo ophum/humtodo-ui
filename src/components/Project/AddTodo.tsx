@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { TodoEntity } from '../../client/types/entities/entities';
+import { useAddTodo } from '../../service/project/project';
 
 interface Props {
   newTodo: TodoEntity;
   setNewTodo: (t: TodoEntity) => void;
+  onAddTodo: () => void;
 }
 
 function Presenter(props: Props) {
-  const { newTodo, setNewTodo } = props;
+  const { newTodo, setNewTodo, onAddTodo } = props;
   return (
     <div>
       開始日時:
@@ -22,14 +24,14 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      終了日時:
+      予定時間(h):
       <input
-        type="datetime-local"
-        value={newTodo.end_datetime}
+        type="number"
+        value={newTodo.scheduled_time}
         onChange={(e) =>
           setNewTodo({
             ...newTodo,
-            end_datetime: e.target.value,
+            scheduled_time: parseInt(e.target.value),
           })
         }
       />
@@ -47,16 +49,42 @@ function Presenter(props: Props) {
         {newTodo.description}
       </textarea>
       <br />
-      <button>予定を追加</button>
+      <button onClick={onAddTodo}>予定を追加</button>
     </div>
   );
 }
 export interface AddTodoProps {
+  projectId: string;
   taskId: string;
+
+  reload: () => void;
 }
 
 export default function AddTodo(props: AddTodoProps) {
-  const { taskId } = props;
+  const { projectId, taskId, reload } = props;
   const [todo, setTodo] = useState({} as TodoEntity);
-  return <Presenter newTodo={todo} setNewTodo={setTodo} />;
+  const addTodo = useAddTodo();
+
+  const onAddTodo = async () => {
+    try {
+      await addTodo(
+        projectId,
+        taskId,
+        todo.start_datetime,
+        todo.scheduled_time,
+        todo.description
+      );
+      setTodo({
+        start_datetime: '',
+        scheduled_time: 0,
+        description: '',
+      } as TodoEntity);
+      reload();
+    } catch (e) {
+      alert(e);
+    }
+  };
+  return (
+    <Presenter newTodo={todo} setNewTodo={setTodo} onAddTodo={onAddTodo} />
+  );
 }

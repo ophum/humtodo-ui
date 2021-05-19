@@ -11,12 +11,13 @@ interface Props {
   project: ProjectEntity;
   tasks: TaskEntity[];
 
+  reload: () => void;
   setNewTask: (t: TaskEntity) => void;
   createTask: () => void;
 }
 
 function Presenter(props: Props) {
-  const { newTask, project, tasks, setNewTask, createTask } = props;
+  const { newTask, project, tasks, reload, setNewTask, createTask } = props;
 
   return (
     <div>
@@ -33,15 +34,15 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      TaskPlanHour:
+      予定時間(h):
       <br />
       <input
         type="number"
-        value={newTask.plan}
+        value={newTask.total_scheduled_time}
         onChange={(e) =>
           setNewTask({
             ...newTask,
-            plan: parseInt(e.target.value),
+            total_scheduled_time: parseInt(e.target.value),
           })
         }
       />
@@ -52,7 +53,7 @@ function Presenter(props: Props) {
       <br />
       <p>{project.name}</p>
       {tasks.map((v, k) => {
-        return <TaskItem key={k} task={v} />;
+        return <TaskItem key={k} task={v} reload={reload} />;
       })}
     </div>
   );
@@ -94,7 +95,7 @@ export default function Project() {
         await createTask(
           project._id,
           newTask.title,
-          newTask.plan,
+          newTask.total_scheduled_time,
           newTask.assignee_ids
         );
         await syncProject();
@@ -109,6 +110,7 @@ export default function Project() {
       newTask={newTask}
       project={project}
       tasks={tasks}
+      reload={syncProject}
       setNewTask={setNewTask}
       createTask={handleCreateTask}
     />

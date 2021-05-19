@@ -24,15 +24,35 @@ export const useCreateTask = () => {
   const [client] = useGlobalState('client');
 
   return async (
-    project_id: string,
+    projectId: string,
     title: string,
-    plan: number,
-    assignee_ids: string[]
+    totalScheduledTime: number,
+    assigneeIds: string[]
   ) => {
-    const res = await client.taskCreate(project_id, {
-      title,
-      plan,
-      assignee_ids,
+    const res = await client.taskCreate(projectId, {
+      title: title,
+      total_scheduled_time: totalScheduledTime,
+      assignee_ids: assigneeIds,
+    });
+    return res.task;
+  };
+};
+
+export const useAddTodo = () => {
+  const [client] = useGlobalState('client');
+
+  return async (
+    projectId: string,
+    taskId: string,
+    startDatetime: string,
+    scheduledTime: number,
+    description: string
+  ) => {
+    const res = await client.addTodo(projectId, taskId, {
+      start_datetime: startDatetime,
+      scheduled_time: scheduledTime,
+      description: description,
+      assignee_id: '',
     });
     return res.task;
   };

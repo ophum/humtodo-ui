@@ -1,5 +1,7 @@
 import HTTPClient from './base/client';
 import {
+  AddTodoRequest,
+  AddTodoResponse,
   CreateProjectRequest,
   CreateTaskRequest,
   CreateTaskResponse,
@@ -65,6 +67,21 @@ export default class Client extends HTTPClient {
     req: CreateTaskRequest
   ): Promise<CreateTaskResponse> {
     const res = await this._post('/api/projects/' + project_id + '/tasks', req);
+    if (res.ok) {
+      return await res.json();
+    }
+    throw new Error('error');
+  }
+
+  async addTodo(
+    projectId: string,
+    taskId: string,
+    req: AddTodoRequest
+  ): Promise<AddTodoResponse> {
+    const res = await this._post(
+      '/api/projects/' + projectId + '/tasks/' + taskId + '/add-todo',
+      req
+    );
     if (res.ok) {
       return await res.json();
     }
