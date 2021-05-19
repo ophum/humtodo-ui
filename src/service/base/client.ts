@@ -1,52 +1,52 @@
 export default class HTTPClient {
-    private baseURL = "";
-    private headers = new Headers();
+  private baseURL = '';
+  private headers = new Headers();
 
-    constructor(baseURL: string) {
-        this.baseURL = baseURL;
-        this.headers.append("Content-Type", "application/json");
-    }
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+    this.headers.append('Content-Type', 'application/json');
+  }
 
-    SetAuthorization(type: AuthorizationType, token: string) {
-        this._setHeader("Authorization", `${type} ${token}`);
-    }
+  SetAuthorization(type: AuthorizationType, token: string) {
+    this._setHeader('Authorization', `${type} ${token}`);
+  }
 
-    protected _setHeader(key: string, value: string) {
-        this.headers.set(key, value);
-    }
+  protected _setHeader(key: string, value: string) {
+    this.headers.set(key, value);
+  }
 
-    protected _unsetHeader(key: string) {
-        this.headers.delete(key);
-    }
+  protected _unsetHeader(key: string) {
+    this.headers.delete(key);
+  }
 
-    protected _get(path: string) {
-        return this._request("GET", path, {});
-    }
-    protected _post(path: string, payload: any) {
-        return this._request("POST", path, payload);
-    }
-    protected _put(path: string, payload: any) {
-        return this._request("PUT", path, payload);
-    }
-    protected _patch(path: string, payload: any) {
-        return this._request("PATCH", path, payload);
-    }
-    protected _delete(path: string, payload: any) {
-        return this._request("DELETE", path, payload);
-    }
+  protected _get(path: string) {
+    return this._request('GET', path, {});
+  }
+  protected _post(path: string, payload: any) {
+    return this._request('POST', path, payload);
+  }
+  protected _put(path: string, payload: any) {
+    return this._request('PUT', path, payload);
+  }
+  protected _patch(path: string, payload: any) {
+    return this._request('PATCH', path, payload);
+  }
+  protected _delete(path: string, payload: any) {
+    return this._request('DELETE', path, payload);
+  }
 
-    protected _request(method: string, path: string, payload: any) {
-        const options: RequestInit = {
-            headers: this.headers,
-            method: method,
-            body: method === "GET" ? null : JSON.stringify(payload),
-            mode: "cors",
-        };
+  protected _request(method: string, path: string, payload: any) {
+    const options: RequestInit = {
+      headers: this.headers,
+      method: method,
+      body: method === 'GET' ? null : JSON.stringify(payload),
+      mode: 'cors',
+    };
 
-        return fetch(`${this.baseURL}${path}`, options);
-    }
+    return fetch(`${this.baseURL}${path}`, options);
+  }
 }
 
 export enum AuthorizationType {
-    Bearer = "Bearer",
+  Bearer = 'Bearer',
 }

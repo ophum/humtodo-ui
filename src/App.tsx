@@ -7,16 +7,14 @@ import ProjectList from './components/pages/ProjectList';
 import SignInOrSignUp from './components/pages/SignInOrSignUp';
 import Client from './service/client';
 
-
 const baseURL = process.env.REACT_APP_API_BASE_URL!;
 const initialState = {
-  token: "",
+  token: '',
   client: new Client(baseURL),
-}
+};
 export const { useGlobalState } = createGlobalState(initialState);
 
 function App() {
-
   return (
     <div>
       <Router>
@@ -25,7 +23,7 @@ function App() {
         <Route exact path="/projects" component={ProjectList} />
       </Router>
     </div>
-  )
+  );
 }
 
 export default App;
