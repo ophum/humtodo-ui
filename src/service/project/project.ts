@@ -1,13 +1,30 @@
 import { useGlobalState } from '../../App';
 import { ProjectEntity } from '../../client/types/entities/entities';
+import { useEffect, useState } from 'react';
 
 export const useFindAllProject = () => {
   const [client] = useGlobalState('client');
+  const [projects, setProjects] = useState([] as ProjectEntity[]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  return async () => {
-    const res = await client.projectFindAll();
-    return res.projects as ProjectEntity[];
+  const reload = async () => {
+    setIsLoading(true);
+
+    try {
+      const res = await client.projectFindAll();
+      setProjects(res.projects as ProjectEntity[]);
+    } catch (e) {
+      alert(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    void reload();
+  }, []);
+
+  return { projects, isLoading, reload };
 };
 
 export const useCreateProject = () => {
@@ -27,7 +44,7 @@ export const useCreateTask = () => {
     projectId: string,
     title: string,
     totalScheduledTime: number,
-    assigneeIds: string[]
+    assigneeIds: string[],
   ) => {
     const res = await client.taskCreate(projectId, {
       title: title,
@@ -46,7 +63,7 @@ export const useAddTodo = () => {
     taskId: string,
     startDatetime: string,
     scheduledTime: number,
-    description: string
+    description: string,
   ) => {
     const res = await client.addTodo(projectId, taskId, {
       start_datetime: startDatetime,
