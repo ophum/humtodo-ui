@@ -4,7 +4,6 @@ import { ProjectEntity } from '../client/types/entities/entities';
 import { useIsSignIn } from '../service/auth/auth';
 import {
   useCreateProject,
-  useFindAllProject,
 } from '../service/project/project';
 
 interface Props {
@@ -24,12 +23,12 @@ function Presenter(props: Props) {
       ProjectName:
       <br />
       <input
-        type="text"
+        type='text'
         value={newProjectName}
         onChange={(e) => setNewProjectName(e.target.value)}
       />
       <br />
-      <button type="button" onClick={createProject}>
+      <button type='button' onClick={createProject}>
         add
       </button>
       <br />
@@ -55,7 +54,6 @@ export default function ProjectList() {
   const [newProjectName, setNewProjectName] = useState('');
   const isSignIn = useIsSignIn();
   const createProject = useCreateProject();
-  const findAllProject = useFindAllProject();
 
   useEffect(() => {
     if (!isSignIn) {
@@ -66,12 +64,12 @@ export default function ProjectList() {
   }, [isSignIn]);
 
   const syncProjects = async () => {
-    try {
-      const projects = await findAllProject();
-      setProjects(projects);
-    } catch (e) {
-      alert(e);
-    }
+    // try {
+    //   const { projects } = await findAllProject();
+    //   setProjects(projects);
+    // } catch (e) {
+    //   alert(e);
+    // }
   };
 
   const handleCreateProject = async () => {

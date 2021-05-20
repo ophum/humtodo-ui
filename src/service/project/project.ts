@@ -1,13 +1,30 @@
 import { useGlobalState } from '../../App';
 import { ProjectEntity } from '../../client/types/entities/entities';
+import { useEffect, useState } from 'react';
 
 export const useFindAllProject = () => {
   const [client] = useGlobalState('client');
+  const [projects, setProjects] = useState([] as ProjectEntity[]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  return async () => {
-    const res = await client.projectFindAll();
-    return res.projects as ProjectEntity[];
-  };
+  useEffect(() => {
+    const load = async (): Promise<void> => {
+      setIsLoading(true);
+
+      try {
+        const res = await client.projectFindAll();
+        setProjects(res.projects as ProjectEntity[]);
+      } catch (e) {
+        throw new Error('error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void load();
+  }, []);
+
+  return { projects, isLoading };
 };
 
 export const useCreateProject = () => {
