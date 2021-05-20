@@ -7,24 +7,24 @@ export const useFindAllProject = () => {
   const [projects, setProjects] = useState([] as ProjectEntity[]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const reload = async () => {
+    setIsLoading(true);
+
+    try {
+      const res = await client.projectFindAll();
+      setProjects(res.projects as ProjectEntity[]);
+    } catch (err) {
+      throw new Error('error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async (): Promise<void> => {
-      setIsLoading(true);
-
-      try {
-        const res = await client.projectFindAll();
-        setProjects(res.projects as ProjectEntity[]);
-      } catch (e) {
-        throw new Error('error');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void load();
+    void reload();
   }, []);
 
-  return { projects, isLoading };
+  return { projects, isLoading, reload };
 };
 
 export const useCreateProject = () => {
@@ -44,7 +44,7 @@ export const useCreateTask = () => {
     projectId: string,
     title: string,
     totalScheduledTime: number,
-    assigneeIds: string[]
+    assigneeIds: string[],
   ) => {
     const res = await client.taskCreate(projectId, {
       title: title,
@@ -63,7 +63,7 @@ export const useAddTodo = () => {
     taskId: string,
     startDatetime: string,
     scheduledTime: number,
-    description: string
+    description: string,
   ) => {
     const res = await client.addTodo(projectId, taskId, {
       start_datetime: startDatetime,

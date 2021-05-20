@@ -5,7 +5,7 @@ import './App.css';
 import Project from './pages/Project';
 import SignInOrSignUp from './pages/SignInOrSignUp';
 import Client from './client/client';
-import ProjectList from './container/ProjectList';
+import ProjectList from './pages/ProjectList';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 const initialState = {
