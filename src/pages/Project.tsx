@@ -21,8 +21,8 @@ function Presenter(props: Props) {
 
   return (
     <div>
-      TaskTitle:
-      <br />
+      <h1>Project: {project.name}</h1>
+      TaskTitle:{' '}
       <input
         type="text"
         value={newTask.title}
@@ -34,8 +34,7 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      開始日時:
-      <br />
+      開始日時:{' '}
       <input
         type="datetime-local"
         value={newTask.start_datetime}
@@ -47,8 +46,7 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      終了日時:
-      <br />
+      終了日時:{' '}
       <input
         type="datetime-local"
         value={newTask.end_datetime}
@@ -60,8 +58,7 @@ function Presenter(props: Props) {
         }
       />
       <br />
-      予定時間(h):
-      <br />
+      予定時間(h):{' '}
       <input
         type="number"
         value={newTask.total_scheduled_time}
@@ -74,10 +71,11 @@ function Presenter(props: Props) {
       />
       <br />
       <button type="button" onClick={createTask}>
-        add
+        タスクを追加
       </button>
       <br />
-      <p>{project.name}</p>
+      <br />
+      <b>タスク一覧</b>
       {tasks.map((v, k) => {
         return <TaskItem key={k} task={v} reload={reload} />;
       })}

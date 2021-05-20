@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { TaskEntity, TodoEntity } from '../../client/types/entities/entities';
+import React, { useState } from 'react';
+import { TaskEntity } from '../../client/types/entities/entities';
 import AddTodo from './AddTodo';
 
 interface Props {
@@ -16,32 +16,34 @@ function Presenter(props: Props) {
       <div style={{ display: 'flex' }}>
         <div style={{ marginRight: 4 }}>{task.title}</div>
         <div style={{ marginRight: 4 }}>{task.total_scheduled_time}h</div>
-        <div>
-          <button onClick={onToggle}>{isOpen ? '閉じる' : '開く'}</button>
-        </div>
       </div>
       <div style={{ width: '100%' }}>
         {task.start_datetime} ~ {task.end_datetime} {task.total_scheduled_time}h
       </div>
-      {isOpen && (
+      <div>
+        {task.todos &&
+          task.todos.map((v, k) => {
+            return (
+              <div key={k}>
+                {k < task.todos.length - 1 ? '├' : '└'}
+                {v.start_datetime} ~ {v.scheduled_time}h {v.description}
+              </div>
+            );
+          })}
+        <br />
         <div>
-          {task.todos &&
-            task.todos.map((v, k) => {
-              return (
-                <div key={k}>
-                  {k < task.todos.length - 1 ? '├' : '└'}
-                  {v.start_datetime} ~ {v.scheduled_time}h {v.description}
-                </div>
-              );
-            })}
-          <br />
-          <AddTodo
-            projectId={task.project_id}
-            taskId={task._id || ''}
-            reload={reload}
-          />
+          <button onClick={onToggle}>{isOpen ? '閉じる' : '予定の作成'}</button>
         </div>
-      )}
+        {isOpen && (
+          <>
+            <AddTodo
+              projectId={task.project_id}
+              taskId={task._id || ''}
+              reload={reload}
+            />
+          </>
+        )}
+      </div>
       <hr />
     </div>
   );
