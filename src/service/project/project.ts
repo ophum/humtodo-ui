@@ -13,8 +13,8 @@ export const useFindAllProject = () => {
     try {
       const res = await client.projectFindAll();
       setProjects(res.projects as ProjectEntity[]);
-    } catch (err) {
-      throw new Error('error');
+    } catch (e) {
+      alert(e);
     } finally {
       setIsLoading(false);
     }
