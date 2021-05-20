@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { resolveModuleName } from 'typescript';
 import { TaskEntity } from '../../client/types/entities/entities';
 import AddTodo from './AddTodo';
 
@@ -28,10 +27,12 @@ function Presenter(props: Props) {
             task.todos.map((v, k) => {
               return (
                 <div key={k}>
+                  {k < task.todos.length - 1 ? '├' : '└'}
                   {v.start_datetime} ~ {v.scheduled_time}h {v.description}
                 </div>
               );
             })}
+          <br />
           <AddTodo
             projectId={task.project_id}
             taskId={task._id || ''}
@@ -39,6 +40,7 @@ function Presenter(props: Props) {
           />
         </div>
       )}
+      <hr />
     </div>
   );
 }
