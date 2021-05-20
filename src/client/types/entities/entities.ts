@@ -8,6 +8,8 @@ export interface ProjectEntity {
 export interface TaskEntity {
   _id?: string;
   title: string;
+  start_datetime: string;
+  end_datetime: string;
   total_scheduled_time: number;
   todos: TodoEntity[];
   assignee_ids: string[];

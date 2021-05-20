@@ -43,11 +43,15 @@ export const useCreateTask = () => {
   return async (
     projectId: string,
     title: string,
+    startDatetime: string,
+    endDatetime: string,
     totalScheduledTime: number,
-    assigneeIds: string[],
+    assigneeIds: string[]
   ) => {
     const res = await client.taskCreate(projectId, {
       title: title,
+      start_datetime: startDatetime,
+      end_datetime: endDatetime,
       total_scheduled_time: totalScheduledTime,
       assignee_ids: assigneeIds,
     });
@@ -63,7 +67,7 @@ export const useAddTodo = () => {
     taskId: string,
     startDatetime: string,
     scheduledTime: number,
-    description: string,
+    description: string
   ) => {
     const res = await client.addTodo(projectId, taskId, {
       start_datetime: startDatetime,

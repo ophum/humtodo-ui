@@ -1,9 +1,10 @@
-import React, { useEffect, useState, VFC } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { ProjectEntity } from '../client/types/entities/entities';
 import { useIsSignIn } from '../service/auth/auth';
 import {
-  useCreateProject, useFindAllProject,
+  useCreateProject,
+  useFindAllProject,
 } from '../service/project/project';
 
 interface Props {
@@ -16,7 +17,13 @@ interface Props {
 }
 
 function Presenter(props: Props) {
-  const { newProjectName, projects, isLoading, setNewProjectName, createProject } = props;
+  const {
+    newProjectName,
+    projects,
+    isLoading,
+    setNewProjectName,
+    createProject,
+  } = props;
   const history = useHistory();
 
   return (
@@ -24,27 +31,29 @@ function Presenter(props: Props) {
       ProjectName:
       <br />
       <input
-        type='text'
+        type="text"
         value={newProjectName}
         onChange={(e) => setNewProjectName(e.target.value)}
       />
       <br />
-      <button type='button' onClick={createProject}>
+      <button type="button" onClick={createProject}>
         add
       </button>
       <br />
-      {isLoading ? 'Loading...' : projects.map((v, k) => {
-        return (
-          <li
-            key={k}
-            onClick={() => {
-              history.push('/projects/' + v._id || '');
-            }}
-          >
-            {v.name}
-          </li>
-        );
-      })}
+      {isLoading
+        ? 'Loading...'
+        : projects.map((v, k) => {
+            return (
+              <li
+                key={k}
+                onClick={() => {
+                  history.push('/projects/' + v._id || '');
+                }}
+              >
+                {v.name}
+              </li>
+            );
+          })}
     </div>
   );
 }

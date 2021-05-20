@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { TaskEntity } from '../../client/types/entities/entities';
+import React, { useEffect, useState } from 'react';
+import { TaskEntity, TodoEntity } from '../../client/types/entities/entities';
 import AddTodo from './AddTodo';
 
 interface Props {
   task: TaskEntity;
   isOpen: boolean;
-
   reload: () => void;
   onToggle: () => void;
 }
@@ -20,6 +19,9 @@ function Presenter(props: Props) {
         <div>
           <button onClick={onToggle}>{isOpen ? '閉じる' : '開く'}</button>
         </div>
+      </div>
+      <div style={{ width: '100%' }}>
+        {task.start_datetime} ~ {task.end_datetime} {task.total_scheduled_time}h
       </div>
       {isOpen && (
         <div>

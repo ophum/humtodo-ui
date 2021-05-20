@@ -34,6 +34,32 @@ function Presenter(props: Props) {
         }
       />
       <br />
+      開始日時:
+      <br />
+      <input
+        type="datetime-local"
+        value={newTask.start_datetime}
+        onChange={(e) =>
+          setNewTask({
+            ...newTask,
+            start_datetime: e.target.value,
+          })
+        }
+      />
+      <br />
+      終了日時:
+      <br />
+      <input
+        type="datetime-local"
+        value={newTask.end_datetime}
+        onChange={(e) =>
+          setNewTask({
+            ...newTask,
+            end_datetime: e.target.value,
+          })
+        }
+      />
+      <br />
       予定時間(h):
       <br />
       <input
@@ -95,6 +121,8 @@ export default function Project() {
         await createTask(
           project._id,
           newTask.title,
+          newTask.start_datetime,
+          newTask.end_datetime,
           newTask.total_scheduled_time,
           newTask.assignee_ids
         );
