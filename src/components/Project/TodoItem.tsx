@@ -1,4 +1,3 @@
-import { ChevronRight, ExpandMore } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { TodoEntity } from '../../client/types/entities/entities';
 
