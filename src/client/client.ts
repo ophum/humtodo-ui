@@ -5,14 +5,12 @@ import {
   CreateProjectRequest,
   CreateTaskRequest,
   CreateTaskResponse,
+  PatchTodoRequest,
+  PatchTodoResponse,
   SignInRequest,
   SignInResponse,
   SignUpRequest,
   SignUpResponse,
-  UpdateIsDoneTodoRequest,
-  UpdateIsDoneTodoResponse,
-  UpdateTitleTodoRequest,
-  UpdateTitleTodoResponse,
   VerifyRequest,
   VerifyResponse,
 } from './types/controllers/controllers';
@@ -92,28 +90,13 @@ export default class Client extends HTTPClient {
     throw new Error('error');
   }
 
-  async updateIsDoneTodo(
+  async patchTodo(
     projectId: string,
     taskId: string,
-    req: UpdateIsDoneTodoRequest
-  ): Promise<UpdateIsDoneTodoResponse> {
+    req: PatchTodoRequest
+  ): Promise<PatchTodoResponse> {
     const res = await this._patch(
-      `/api/projects/${projectId}/tasks/${taskId}/update-is-done-todo`,
-      req
-    );
-    if (res.ok) {
-      return await res.json();
-    }
-    throw new Error('error');
-  }
-
-  async updateTitleTodo(
-    projectId: string,
-    taskId: string,
-    req: UpdateTitleTodoRequest
-  ): Promise<UpdateTitleTodoResponse> {
-    const res = await this._patch(
-      `/api/projects/${projectId}/tasks/${taskId}/update-title-todo`,
+      `/api/projects/${projectId}/tasks/${taskId}/patch-todo`,
       req
     );
     if (res.ok) {

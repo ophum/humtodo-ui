@@ -1,17 +1,4 @@
 import { TaskEntity } from '../entities/entities';
-export interface VerifyResponse {
-  token: string;
-}
-
-export interface SignUpRequest {
-  name: string;
-  password: string;
-}
-
-export interface SignUpResponse {
-  token: string;
-}
-
 export interface SignInRequest {
   name: string;
   password: string;
@@ -25,6 +12,19 @@ export interface VerifyRequest {
   token: string;
 }
 
+export interface VerifyResponse {
+  token: string;
+}
+
+export interface SignUpRequest {
+  name: string;
+  password: string;
+}
+
+export interface SignUpResponse {
+  token: string;
+}
+
 export interface CreateProjectRequest {
   name: string;
 }
@@ -33,21 +33,31 @@ export interface JoinProjectRequest {
   user_id: string;
 }
 
-export interface UpdateIsDoneTodoRequest {
-  todo_id: string;
-  is_done: boolean;
+export interface AddTodoRequest {
+  title: string;
+  assignee_id: string;
+  start_datetime: string;
+  scheduled_time: number;
+  note: string;
 }
 
-export interface UpdateIsDoneTodoResponse {
+export interface AddTodoResponse {
   task: TaskEntity;
 }
 
-export interface UpdateTitleTodoRequest {
+export interface PatchTodoRequest {
   todo_id: string;
-  title: string;
+  patch_fields: string[];
+  title?: string;
+  assignee_id?: string;
+  start_datetime?: string;
+  scheduled_time?: number;
+  actual_time?: number;
+  note?: string;
+  is_done?: boolean;
 }
 
-export interface UpdateTitleTodoResponse {
+export interface PatchTodoResponse {
   task: TaskEntity;
 }
 
@@ -60,17 +70,5 @@ export interface CreateTaskRequest {
 }
 
 export interface CreateTaskResponse {
-  task: TaskEntity;
-}
-
-export interface AddTodoRequest {
-  title: string;
-  assignee_id: string;
-  start_datetime: string;
-  scheduled_time: number;
-  note: string;
-}
-
-export interface AddTodoResponse {
   task: TaskEntity;
 }

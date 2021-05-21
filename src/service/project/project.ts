@@ -122,8 +122,9 @@ export const useUpdateIsDoneTodo = () => {
     todoId: string,
     isDone: boolean
   ) => {
-    const res = await client.updateIsDoneTodo(projectId, taskId, {
+    const res = await client.patchTodo(projectId, taskId, {
       todo_id: todoId,
+      patch_fields: ['is_done'],
       is_done: isDone,
     });
     return res.task;
@@ -138,8 +139,9 @@ export const useUpdateTitleTodo = () => {
     todoId: string,
     title: string
   ) => {
-    const res = await client.updateTitleTodo(projectId, taskId, {
+    const res = await client.patchTodo(projectId, taskId, {
       todo_id: todoId,
+      patch_fields: ['title'],
       title: title,
     });
     return res.task;
