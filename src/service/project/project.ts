@@ -1,6 +1,10 @@
 import { useGlobalState } from '../../App';
-import { ProjectEntity } from '../../client/types/entities/entities';
+import {
+  ProjectEntity,
+  TaskEntity,
+} from '../../client/types/entities/entities';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 export const useFindAllProject = () => {
   const [client] = useGlobalState('client');
@@ -25,6 +29,35 @@ export const useFindAllProject = () => {
   }, []);
 
   return { projects, isLoading, reload };
+};
+
+export const useFindWithTasksProject = (projectId?: string) => {
+  const [client] = useGlobalState('client');
+  const [project, setProject] = useState({} as ProjectEntity);
+  const [tasks, setTasks] = useState([] as TaskEntity[]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useParams<{ id: string }>();
+
+  const reload = async () => {
+    setIsLoading(true);
+    try {
+      const res = await client.projectFindWithTasks(projectId || id);
+      setProject({
+        ...res.project,
+      });
+      setTasks([...res.tasks]);
+    } catch {
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+    return;
+  };
+  useEffect(() => {
+    reload();
+  }, []);
+
+  return { project, tasks, isLoading, reload };
 };
 
 export const useCreateProject = () => {

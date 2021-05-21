@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
-import { useGlobalState } from '../App';
+import { useHistory } from 'react-router';
 import { ProjectEntity, TaskEntity } from '../client/types/entities/entities';
-import { useIsSignIn } from '../service/auth/auth';
-import { useCreateTask } from '../service/project/project';
 import TaskItem from '../components/Project/TaskItem';
+import { useIsSignIn } from '../service/auth/auth';
+import {
+  useCreateTask,
+  useFindWithTasksProject,
+} from '../service/project/project';
 
 interface Props {
   newTask: TaskEntity;
   project: ProjectEntity;
   tasks: TaskEntity[];
+  isLoading: boolean;
 
   reload: () => void;
   setNewTask: (t: TaskEntity) => void;
@@ -17,10 +20,12 @@ interface Props {
 }
 
 function Presenter(props: Props) {
-  const { newTask, project, tasks, reload, setNewTask, createTask } = props;
+  const { newTask, project, tasks, isLoading, reload, setNewTask, createTask } =
+    props;
 
   return (
     <div>
+      {isLoading ? 'Loading' : 'Loaded'}
       <h1>Project: {project.name}</h1>
       TaskTitle:{' '}
       <input
@@ -85,33 +90,16 @@ function Presenter(props: Props) {
 
 export default function Project() {
   const history = useHistory();
-  const [client] = useGlobalState('client');
-  const [project, setProject] = useState({} as ProjectEntity);
-  const [tasks, setTasks] = useState([] as TaskEntity[]);
+  const { project, tasks, isLoading, reload } = useFindWithTasksProject();
   const [newTask, setNewTask] = useState({} as TaskEntity);
-  const { id } = useParams<{ id: string }>();
   const isSignIn = useIsSignIn();
   const createTask = useCreateTask();
 
   useEffect(() => {
     if (!isSignIn) {
       history.replace('/');
-    } else {
-      syncProject();
     }
   }, [isSignIn]);
-
-  const syncProject = async () => {
-    try {
-      const res = await client.projectFindWithTasks(id);
-      setProject({
-        ...(res.project as ProjectEntity),
-      });
-      setTasks([...(res.tasks as TaskEntity[])]);
-    } catch (e) {
-      alert(e);
-    }
-  };
 
   const handleCreateTask = async () => {
     try {
@@ -124,7 +112,7 @@ export default function Project() {
           newTask.total_scheduled_time,
           newTask.assignee_ids
         );
-        await syncProject();
+        await reload();
       }
     } catch (e) {
       alert(e);
@@ -136,7 +124,8 @@ export default function Project() {
       newTask={newTask}
       project={project}
       tasks={tasks}
-      reload={syncProject}
+      isLoading={isLoading}
+      reload={reload}
       setNewTask={setNewTask}
       createTask={handleCreateTask}
     />
