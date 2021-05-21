@@ -57,9 +57,8 @@ function Presenter(props: Props) {
             note: e.target.value,
           })
         }
-      >
-        {newTodo.note}
-      </textarea>
+        value={newTodo.note}
+      />
       <br />
       <button onClick={onAddTodo}>予定を追加</button>
     </div>
@@ -88,6 +87,7 @@ export default function AddTodo(props: AddTodoProps) {
         todo.note
       );
       setTodo({
+        title: '',
         start_datetime: '',
         scheduled_time: 0,
         note: '',

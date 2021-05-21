@@ -27,24 +27,23 @@ function Presenter(props: Props) {
         {todo.title}
       </span>
       {isOpenNote && (
-        <>
+        <div
+          style={{
+            margin: 10,
+            marginTop: 2,
+            padding: 2,
+            border: '1px solid grey',
+          }}
+        >
           <div>
-            <div>
-              <span
-                style={{ width: 24, height: 'auto', display: 'inline-block' }}
-              >
-                {prefix === '├ ' && '│ '}
-              </span>
-              {todo.start_datetime} ~ {todo.scheduled_time}h
-            </div>
-            <span
-              style={{ width: 24, height: 'auto', display: 'inline-block' }}
-            >
-              {prefix === '├ ' && '│ '}
-            </span>
-            {todo.note}
+            予定開始時間: {todo.start_datetime}
+            <br />
+            予定時間: {todo.scheduled_time}h
           </div>
-        </>
+          Note:
+          <br />
+          <textarea>{todo.note}</textarea>
+        </div>
       )}
     </div>
   );
