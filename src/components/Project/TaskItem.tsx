@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { TaskEntity } from '../../client/types/entities/entities';
-import { useUpdateIsDoneTodo } from '../../service/project/project';
+import {
+  useUpdateIsDoneTodo,
+  useUpdateTitleTodo,
+} from '../../service/project/project';
 import AddTodo from './AddTodo';
 import TodoItem from './TodoItem';
 
@@ -10,10 +13,11 @@ interface Props {
   reload: () => void;
   onToggle: () => void;
   updateIsDone: (todoId: string, isDone: boolean) => void;
+  updateTitle: (todoId: string, title: string) => void;
 }
 
 function Presenter(props: Props) {
-  const { task, isOpen, reload, onToggle, updateIsDone } = props;
+  const { task, isOpen, reload, onToggle, updateIsDone, updateTitle } = props;
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -32,6 +36,7 @@ function Presenter(props: Props) {
                 todo={v}
                 prefix={k < task.todos.length - 1 ? '├ ' : '└ '}
                 updateIsDone={updateIsDone}
+                updateTitle={updateTitle}
               />
             );
           })}
@@ -64,6 +69,7 @@ export default function TaskItem(props: TaskItemProps) {
   const { task, reload } = props;
   const [isOpen, setIsOpen] = useState(false);
   const updateIsDoneTodo = useUpdateIsDoneTodo();
+  const updateTitleTodo = useUpdateTitleTodo();
 
   const onToggle = () => {
     setIsOpen(!isOpen);
@@ -75,6 +81,13 @@ export default function TaskItem(props: TaskItemProps) {
       await reload();
     }
   };
+
+  const updateTitle = async (todoId: string, title: string) => {
+    if (task._id) {
+      await updateTitleTodo(task.project_id, task._id, todoId, title);
+      await reload();
+    }
+  };
   return (
     <Presenter
       task={task}
@@ -82,6 +95,7 @@ export default function TaskItem(props: TaskItemProps) {
       onToggle={onToggle}
       reload={reload}
       updateIsDone={updateIsDone}
+      updateTitle={updateTitle}
     />
   );
 }

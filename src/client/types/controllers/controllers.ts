@@ -33,7 +33,21 @@ export interface JoinProjectRequest {
   user_id: string;
 }
 
+export interface UpdateIsDoneTodoRequest {
+  todo_id: string;
+  is_done: boolean;
+}
+
 export interface UpdateIsDoneTodoResponse {
+  task: TaskEntity;
+}
+
+export interface UpdateTitleTodoRequest {
+  todo_id: string;
+  title: string;
+}
+
+export interface UpdateTitleTodoResponse {
   task: TaskEntity;
 }
 
@@ -59,9 +73,4 @@ export interface AddTodoRequest {
 
 export interface AddTodoResponse {
   task: TaskEntity;
-}
-
-export interface UpdateIsDoneTodoRequest {
-  todo_id: string;
-  is_done: boolean;
 }

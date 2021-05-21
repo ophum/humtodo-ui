@@ -1,3 +1,4 @@
+import { ChevronRight, ExpandMore } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { TodoEntity } from '../../client/types/entities/entities';
 
@@ -5,11 +6,14 @@ interface Props {
   todo: TodoEntity;
   prefix: '├ ' | '└ ';
   updateIsDone: (id: string, isDone: boolean) => void;
+  updateTitle: (id: string, title: string) => void;
 }
 
 function Presenter(props: Props) {
-  const { todo, prefix, updateIsDone } = props;
+  const { todo, prefix, updateIsDone, updateTitle } = props;
   const [isOpenNote, setIsOpenNote] = useState(false);
+  const [isEditTitle, setIsEditTitle] = useState(false);
+  const [newTitle, setNewTitle] = useState(todo.title);
 
   const handleToggleIsOpenNote = () => {
     setIsOpenNote(!isOpenNote);
@@ -23,8 +27,38 @@ function Presenter(props: Props) {
         onChange={() => updateIsDone(todo._id || '', !todo.is_done)}
         checked={todo.is_done}
       />
-      <span style={{ cursor: 'pointer' }} onClick={handleToggleIsOpenNote}>
-        {todo.title}
+      <span>
+        {isEditTitle ? (
+          <input
+            type="text"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            autoFocus
+            onBlur={() => {
+              updateTitle(todo._id || '', newTitle);
+              setIsEditTitle(false);
+            }}
+          />
+        ) : (
+          <span onClick={() => setIsEditTitle(true)}>{todo.title}</span>
+        )}{' '}
+        {isOpenNote ? (
+          <button
+            type="button"
+            style={{ fontSize: 8, cursor: 'pointer' }}
+            onClick={handleToggleIsOpenNote}
+          >
+            閉じる
+          </button>
+        ) : (
+          <button
+            type="button"
+            style={{ fontSize: 8, cursor: 'pointer' }}
+            onClick={handleToggleIsOpenNote}
+          >
+            開く
+          </button>
+        )}
       </span>
       {isOpenNote && (
         <div
@@ -54,10 +88,18 @@ export interface TodoItemProps {
   prefix: '├ ' | '└ ';
 
   updateIsDone: (id: string, isDone: boolean) => void;
+  updateTitle: (id: string, title: string) => void;
 }
 
 export default function TodoItem(props: TodoItemProps) {
-  const { todo, prefix, updateIsDone } = props;
+  const { todo, prefix, updateIsDone, updateTitle } = props;
 
-  return <Presenter todo={todo} prefix={prefix} updateIsDone={updateIsDone} />;
+  return (
+    <Presenter
+      todo={todo}
+      prefix={prefix}
+      updateIsDone={updateIsDone}
+      updateTitle={updateTitle}
+    />
+  );
 }
