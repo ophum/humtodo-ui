@@ -78,3 +78,19 @@ export const useAddTodo = () => {
     return res.task;
   };
 };
+
+export const useUpdateIsDoneTodo = () => {
+  const [client] = useGlobalState('client');
+  return async (
+    projectId: string,
+    taskId: string,
+    todoId: string,
+    isDone: boolean
+  ) => {
+    const res = await client.updateIsDoneTodo(projectId, taskId, {
+      todo_id: todoId,
+      is_done: isDone,
+    });
+    return res.task;
+  };
+};

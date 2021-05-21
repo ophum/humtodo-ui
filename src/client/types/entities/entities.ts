@@ -17,11 +17,13 @@ export interface TaskEntity {
 }
 
 export interface TodoEntity {
+  _id?: string;
   assignee_id?: string;
   start_datetime: string;
   scheduled_time: number;
   actual_time: number;
   description: string;
+  is_done: boolean;
 }
 
 export interface UserEntity {

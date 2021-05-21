@@ -25,12 +25,16 @@ export interface VerifyResponse {
   token: string;
 }
 
+export interface JoinProjectRequest {
+  user_id: string;
+}
+
 export interface CreateProjectRequest {
   name: string;
 }
 
-export interface JoinProjectRequest {
-  user_id: string;
+export interface UpdateIsDoneTodoResponse {
+  task: TaskEntity;
 }
 
 export interface CreateTaskRequest {
@@ -54,4 +58,9 @@ export interface AddTodoRequest {
 
 export interface AddTodoResponse {
   task: TaskEntity;
+}
+
+export interface UpdateIsDoneTodoRequest {
+  todo_id: string;
+  is_done: boolean;
 }

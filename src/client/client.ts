@@ -9,6 +9,8 @@ import {
   SignInResponse,
   SignUpRequest,
   SignUpResponse,
+  UpdateIsDoneTodoRequest,
+  UpdateIsDoneTodoResponse,
   VerifyRequest,
   VerifyResponse,
 } from './types/controllers/controllers';
@@ -80,6 +82,21 @@ export default class Client extends HTTPClient {
   ): Promise<AddTodoResponse> {
     const res = await this._post(
       '/api/projects/' + projectId + '/tasks/' + taskId + '/add-todo',
+      req
+    );
+    if (res.ok) {
+      return await res.json();
+    }
+    throw new Error('error');
+  }
+
+  async updateIsDoneTodo(
+    projectId: string,
+    taskId: string,
+    req: UpdateIsDoneTodoRequest
+  ): Promise<UpdateIsDoneTodoResponse> {
+    const res = await this._patch(
+      `/api/projects/${projectId}/tasks/${taskId}/update-is-done-todo`,
       req
     );
     if (res.ok) {
