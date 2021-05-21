@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TaskEntity } from '../../client/types/entities/entities';
 import { useUpdateIsDoneTodo } from '../../service/project/project';
 import AddTodo from './AddTodo';
+import TodoItem from './TodoItem';
 
 interface Props {
   task: TaskEntity;
@@ -26,15 +27,12 @@ function Presenter(props: Props) {
         {task.todos &&
           task.todos.map((v, k) => {
             return (
-              <div key={k}>
-                {k < task.todos.length - 1 ? '├ ' : '└ '}
-                <input
-                  type="checkbox"
-                  onChange={() => updateIsDone(v._id || '', !v.is_done)}
-                  checked={v.is_done}
-                />
-                {v.start_datetime} ~ {v.scheduled_time}h {v.description}
-              </div>
+              <TodoItem
+                key={k}
+                todo={v}
+                prefix={k < task.todos.length - 1 ? '├ ' : '└ '}
+                updateIsDone={updateIsDone}
+              />
             );
           })}
         <br />

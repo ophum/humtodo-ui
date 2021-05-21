@@ -1,10 +1,10 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { useGlobalState } from '../../App';
 import {
   ProjectEntity,
   TaskEntity,
 } from '../../client/types/entities/entities';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 
 export const useFindAllProject = () => {
   const [client] = useGlobalState('client');
@@ -98,14 +98,16 @@ export const useAddTodo = () => {
   return async (
     projectId: string,
     taskId: string,
+    title: string,
     startDatetime: string,
     scheduledTime: number,
-    description: string
+    note: string
   ) => {
     const res = await client.addTodo(projectId, taskId, {
+      title: title,
       start_datetime: startDatetime,
       scheduled_time: scheduledTime,
-      description: description,
+      note: note,
       assignee_id: '',
     });
     return res.task;

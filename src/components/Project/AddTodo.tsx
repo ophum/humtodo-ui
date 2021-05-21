@@ -12,6 +12,18 @@ function Presenter(props: Props) {
   const { newTodo, setNewTodo, onAddTodo } = props;
   return (
     <div>
+      タイトル:
+      <input
+        type="text"
+        value={newTodo.title}
+        onChange={(e) =>
+          setNewTodo({
+            ...newTodo,
+            title: e.target.value,
+          })
+        }
+      />
+      <br />
       開始日時:
       <input
         type="datetime-local"
@@ -42,11 +54,11 @@ function Presenter(props: Props) {
         onChange={(e) =>
           setNewTodo({
             ...newTodo,
-            description: e.target.value,
+            note: e.target.value,
           })
         }
       >
-        {newTodo.description}
+        {newTodo.note}
       </textarea>
       <br />
       <button onClick={onAddTodo}>予定を追加</button>
@@ -70,14 +82,15 @@ export default function AddTodo(props: AddTodoProps) {
       await addTodo(
         projectId,
         taskId,
+        todo.title,
         todo.start_datetime,
         todo.scheduled_time,
-        todo.description
+        todo.note
       );
       setTodo({
         start_datetime: '',
         scheduled_time: 0,
-        description: '',
+        note: '',
       } as TodoEntity);
       reload();
     } catch (e) {
