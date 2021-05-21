@@ -6,13 +6,15 @@ interface Props {
   prefix: '├ ' | '└ ';
   updateIsDone: (id: string, isDone: boolean) => void;
   updateTitle: (id: string, title: string) => void;
+  updateNote: (id: string, note: string) => void;
 }
 
 function Presenter(props: Props) {
-  const { todo, prefix, updateIsDone, updateTitle } = props;
+  const { todo, prefix, updateIsDone, updateTitle, updateNote } = props;
   const [isOpenNote, setIsOpenNote] = useState(false);
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [newTitle, setNewTitle] = useState(todo.title);
+  const [newNote, setNewNote] = useState(todo.note);
 
   const handleToggleIsOpenNote = () => {
     setIsOpenNote(!isOpenNote);
@@ -75,7 +77,13 @@ function Presenter(props: Props) {
           </div>
           Note:
           <br />
-          <textarea>{todo.note}</textarea>
+          <textarea
+            onBlur={() => updateNote(todo._id || '', newNote)}
+            onChange={(e) => {
+              setNewNote(e.target.value);
+            }}
+            value={newNote}
+          ></textarea>
         </div>
       )}
     </div>
@@ -88,10 +96,11 @@ export interface TodoItemProps {
 
   updateIsDone: (id: string, isDone: boolean) => void;
   updateTitle: (id: string, title: string) => void;
+  updateNote: (id: string, note: string) => void;
 }
 
 export default function TodoItem(props: TodoItemProps) {
-  const { todo, prefix, updateIsDone, updateTitle } = props;
+  const { todo, prefix, updateIsDone, updateTitle, updateNote } = props;
 
   return (
     <Presenter
@@ -99,6 +108,7 @@ export default function TodoItem(props: TodoItemProps) {
       prefix={prefix}
       updateIsDone={updateIsDone}
       updateTitle={updateTitle}
+      updateNote={updateNote}
     />
   );
 }

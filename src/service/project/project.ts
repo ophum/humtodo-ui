@@ -147,3 +147,20 @@ export const useUpdateTitleTodo = () => {
     return res.task;
   };
 };
+
+export const useUpdateNoteTodo = () => {
+  const [client] = useGlobalState('client');
+  return async (
+    projectId: string,
+    taskId: string,
+    todoId: string,
+    note: string
+  ) => {
+    const res = await client.patchTodo(projectId, taskId, {
+      todo_id: todoId,
+      patch_fields: ['note'],
+      note: note,
+    });
+    return res.task;
+  };
+};
